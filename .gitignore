@@ -1,0 +1,70 @@
+serviceName# --- Keamanan & Konfigurasi ---
+.env
+
+# --- Python & Virtual Environment ---
+# Folder virtual environment (biasanya dinamai venv, env, .venv, dll)
+venv/
+env/
+.venv/
+ENV/
+
+# Python compiled bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribusi / Packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Testing & Coverage ---
+# pytest / unittest
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+# --- IDE & Editor (VS Code, PyCharm, dll) ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.project
+.pydevproject
+.settings/
+
+# --- Sistem Operasi ---
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --- Docker & Database (Jika ada file lokal) ---
+# Jika Anda membuat folder data lokal untuk postgres (selain docker volume)
+postgres_data/
