@@ -6,3 +6,5 @@ pwdlib[argon2]
 PyJWT
 pydantic-settings
 email-validator
+slowapi
+redis
