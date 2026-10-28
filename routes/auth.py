@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from pwdlib import PasswordHash
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
@@ -7,6 +7,7 @@ import jwt
 
 from datetime import datetime, timedelta, timezone
 
+from core.rate_limit import limiter
 from database.connection import get_db
 from models.user import User
 from schemas.auth import SignupRequest, UserResponse, LoginRequest
@@ -18,7 +19,8 @@ password_hash = PasswordHash.recommended()
 
 
 @router.post("/signup", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def signup(payload: SignupRequest, db: Session = Depends(get_db)):
+@limiter.limit("3/hour")
+def signup(request: Request, payload: SignupRequest, db: Session = Depends(get_db)):
     # 1. Cek email
     existing_user = db.scalar(
         select(User).where(User.email == payload.email)
@@ -56,7 +58,8 @@ def signup(payload: SignupRequest, db: Session = Depends(get_db)):
     return user
 
 @router.post("/login")
-def login(payload: LoginRequest, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")
+def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)):
     # 1. Cari email
     user = db.scalar(select(User).where(User.email == payload.email))
 
