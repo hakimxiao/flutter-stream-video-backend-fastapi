@@ -12,6 +12,7 @@ from database.connection import get_db
 from models.user import User
 from schemas.auth import SignupRequest, UserResponse, LoginRequest
 from core.config import settings
+from core.security import get_current_user
 
 
 router = APIRouter()
@@ -48,7 +49,7 @@ def signup(request: Request, payload: SignupRequest, db: Session = Depends(get_d
         db.commit()
         db.refresh(user)
     except IntegrityError:
-        db.roleback()
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Email already registered"
@@ -93,3 +94,9 @@ def login(request: Request, payload: LoginRequest, db: Session = Depends(get_db)
         "access_token": access_token,
         "token_type": "bearer"
     }
+
+@router.get("/me", response_model=UserResponse)
+def read_current_user(
+    current_user: User = Depends(get_current_user)
+):
+    return current_user
